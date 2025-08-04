@@ -32,4 +32,9 @@ class LoyaltyReward
 
         return $this;
     }
+
+    public function getRewardName(): string
+    {
+        return $this->reward['name'] ?? 'Unnamed Reward';
+    }
 }

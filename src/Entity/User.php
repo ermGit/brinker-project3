@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -34,8 +36,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    /*
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $loyaltyRewards = null;
+    */
+
+    #[ORM\ManyToMany(targetEntity: LoyaltyReward::class)]
+    private Collection $loyaltyRewards;
+
+    public function __construct()
+    {
+        $this->loyaltyRewards = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,15 +131,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
-    public function getLoyaltyRewards(): ?array
+    public function getLoyaltyRewards(): Collection
     {
         return $this->loyaltyRewards;
     }
 
-    public function setLoyaltyRewards(?array $loyaltyRewards): static
+    public function setLoyaltyRewards(LoyaltyReward $reward): static
     {
-        $this->loyaltyRewards = $loyaltyRewards;
+        if (!$this->loyaltyRewards->contains($reward)) {
+            $this->loyaltyRewards[] = $reward;
+        }
+        return $this;
+    }
 
+    public function removeLoyaltyReward(LoyaltyReward $reward): static
+    {
+        $this->loyaltyRewards->removeElement($reward);
         return $this;
     }
 }

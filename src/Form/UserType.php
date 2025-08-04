@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\LoyaltyReward;
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -32,13 +34,13 @@ class UserType extends AbstractType
                     'required' => $options['is_edit'] === false,
                 ]
             )
-            ->add(
-                'loyaltyRewards',
-                null,
-                [
-                    'required' => false,
-                ]
-            );
+            ->add('loyaltyRewards', EntityType::class, [
+                'class' => LoyaltyReward::class,
+                'choice_label' => fn (LoyaltyReward $reward) => $reward->getRewardName(),
+                'multiple' => true,
+                'expanded' => true, // checkbox display; set to false for multi-select dropdown
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
