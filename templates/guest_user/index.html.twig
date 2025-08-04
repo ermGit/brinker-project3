@@ -23,7 +23,13 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>{{ user.password }}</td>
-                <td>{{ user.loyaltyRewards ? user.loyaltyRewards|json_encode : '' }}</td>
+                <td>
+                    {% for reward in user.loyaltyRewards %}
+                        {{ reward.reward.name ?? 'Unnamed' }}{% if not loop.last %}, {% endif %}
+                    {% else %}
+                        <em>No rewards</em>
+                    {% endfor %}
+                </td>
                 <td>
                     <a href="{{ path('app_guest_user_show', {'id': user.id}) }}">show</a>
                     <a href="{{ path('app_guest_user_edit', {'id': user.id}) }}">edit</a>

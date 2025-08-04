@@ -25,7 +25,18 @@
             </tr>
             <tr>
                 <th>LoyaltyRewards</th>
-                <td>{{ user.loyaltyRewards ? user.loyaltyRewards|json_encode : '' }}</td>
+                <td>
+                    {% if user.loyaltyRewards|length > 0 %}
+                        <ul>
+                            {% for reward in user.loyaltyRewards %}
+                                <li>{{ reward.reward.name ?? 'Unnamed' }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <em>No rewards assigned</em>
+                    {% endif %}
+                </td>
+                <!--<td>{# {{ user.loyaltyRewards ? user.loyaltyRewards|json_encode : '' }} #}</td>-->
             </tr>
         </tbody>
     </table>
