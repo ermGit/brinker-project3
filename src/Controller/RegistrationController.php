@@ -42,7 +42,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name: 'app_guest_register')]
+    #[Route('/register/guest', name: 'app_guest_register')]
     public function registerGuest(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
