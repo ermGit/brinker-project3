@@ -103,7 +103,7 @@ final class GuestUserApiController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        return $this->json($user, 201, [], ['groups' => 'guest:read']);
+        return $this->json($data, 201, [], ['groups' => 'guest:read']);
     }
 
     #[Route('/{id}', name: 'api_admin_guest_update', methods: ['PUT'])]
@@ -139,7 +139,7 @@ final class GuestUserApiController extends AbstractController
 
         $em->flush();
 
-        return $this->json($user, 200, [], ['groups' => 'guest:read']);
+        return $this->json([$user->getEmail(), $data], 200, [], ['groups' => 'guest:read']);
     }
 
     #[Route('/{id}', name: 'api_admin_guest_delete', methods: ['DELETE'])]
