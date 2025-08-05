@@ -19,6 +19,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $this->router = $router;
     }
 
+    /**
+     * Redirects the User according to their role after login.
+     *
+     * @param Request $request
+     * @param TokenInterface $token
+     * @return Response|null
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): ?Response
     {
         // Example: Redirect based on user roles
