@@ -47,7 +47,6 @@ final class GuestUserApiController extends AbstractController
         }
 
         return $this->json($data, 200, [], ['groups' => 'guest:read']);
-        //return $this->json($guests, 200, [], ['groups' => 'guest:read']);
     }
 
     #[Route('/{id}', name: 'api_admin_guest_show', methods: ['GET'])]
