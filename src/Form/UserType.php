@@ -14,6 +14,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserType extends AbstractType
 {
+    /**
+     * Creates the form for the User.
+     * The Loyalty Rewards section is tied to the rewards present in the db table
+     *
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
