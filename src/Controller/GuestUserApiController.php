@@ -56,7 +56,22 @@ final class GuestUserApiController extends AbstractController
             return $this->json(['error' => 'Not a guest user.'], 403);
         }
 
-        return $this->json($user, 200, [], ['groups' => 'guest:read']);
+        $rewardsData = [];
+
+        foreach ($user->getLoyaltyRewards() as $reward) {
+            $rewardsData[] = [
+                'id' => $reward->getId(),
+                'reward' => $reward->getReward(), // assuming getReward() returns an array
+            ];
+        }
+
+        $data[] = [
+            'id' => $user->getId(),
+            'email' => $user->getEmail(),
+            'loyaltyRewards' => $rewardsData,
+        ];
+
+        return $this->json($data, 200, [], ['groups' => 'guest:read']);
     }
 
     #[Route('', name: 'api_admin_guest_create', methods: ['POST'])]
