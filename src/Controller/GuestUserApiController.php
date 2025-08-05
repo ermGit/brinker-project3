@@ -21,13 +21,33 @@ final class GuestUserApiController extends AbstractController
     #[Route('', name: 'api_admin_guest_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): JsonResponse
     {
-        $guests = $userRepository->createQueryBuilder('u')
+        $users = $userRepository->createQueryBuilder('u')
             ->where('JSON_CONTAINS(u.roles, :role) = 1')
             ->setParameter('role', json_encode('ROLE_GUEST'))
             ->getQuery()
             ->getResult();
 
-        return $this->json($guests, 200, [], ['groups' => 'guest:read']);
+        $data = [];
+
+        foreach ($users as $user) {
+            $rewardsData = [];
+
+            foreach ($user->getLoyaltyRewards() as $reward) {
+                $rewardsData[] = [
+                    'id' => $reward->getId(),
+                    'reward' => $reward->getReward(), // assuming getReward() returns an array
+                ];
+            }
+
+            $data[] = [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'loyaltyRewards' => $rewardsData,
+            ];
+        }
+
+        return $this->json($data, 200, [], ['groups' => 'guest:read']);
+        //return $this->json($guests, 200, [], ['groups' => 'guest:read']);
     }
 
     #[Route('/{id}', name: 'api_admin_guest_show', methods: ['GET'])]
