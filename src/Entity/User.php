@@ -38,11 +38,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    /*
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $loyaltyRewards = null;
-    */
-
     #[Groups(['guest:read'])]
     #[ORM\ManyToMany(targetEntity: LoyaltyReward::class)]
     private Collection $loyaltyRewards;
@@ -52,16 +47,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->loyaltyRewards = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     * @return $this
+     */
     public function setEmail(string $email): static
     {
         $this->email = $email;
@@ -110,6 +115,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     * @return $this
+     */
     public function setPassword(string $password): static
     {
         $this->password = $password;
@@ -134,11 +143,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // @deprecated, to be removed when upgrading to Symfony 8
     }
 
+    /**
+     * @return Collection
+     */
     public function getLoyaltyRewards(): Collection
     {
         return $this->loyaltyRewards;
     }
 
+    /**
+     * @param LoyaltyReward $reward
+     * @return $this
+     */
     public function setLoyaltyRewards(LoyaltyReward $reward): static
     {
         if (!$this->loyaltyRewards->contains($reward)) {
@@ -147,6 +163,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @param LoyaltyReward $reward
+     * @return $this
+     */
     public function removeLoyaltyReward(LoyaltyReward $reward): static
     {
         $this->loyaltyRewards->removeElement($reward);
